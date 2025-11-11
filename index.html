@@ -1,141 +1,386 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HELLO! BURGER - Menu</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HELLO! BURGER — Menu</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap" rel="stylesheet" />
+  <style>
+    :root{
+      --brand-yellow:#FFD447;
+      --brand-red:#E53935;
+      --text:#1f2937;         /* slate-800 */
+      --muted:#6b7280;        /* slate-500 */
+      --price:#16a34a;        /* green-600 */
+      --bg:#f8fafc;           /* slate-50 */
+      --card:#ffffff;
+      --border:#e5e7eb;       /* slate-200 */
+      --chip:#111827;         /* near-black for chips */
+      --accent:#0ea5e9;       /* sky-500 */
+    }
+
+    /* Reset */
+    *,*::before,*::after{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;font-family:'Roboto',system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:var(--text);background:radial-gradient(1200px 600px at 10% -10%, rgba(255,212,71,.25), transparent 60%),
+      radial-gradient(900px 500px at 110% 10%, rgba(229,57,53,.08), transparent 50%),var(--bg);line-height:1.6}
+    img{max-width:100%;display:block}
+    a{color:inherit;text-decoration:none}
+    button{font:inherit}
+
+    .container{max-width:1080px;margin:24px auto;padding:0 16px}
+
+    /* Header / hero */
+    header.hero{border:1px solid var(--border);border-radius:20px;background:linear-gradient(180deg, var(--brand-yellow) 0%, #FFE88C 100%);box-shadow:0 10px 30px rgba(0,0,0,.06);padding:24px;position:relative;overflow:hidden}
+    header.hero::after{content:"";position:absolute;inset:auto -10% -40% -10%;height:120px;background:radial-gradient(60% 100% at 50% 100%, rgba(255,255,255,.5), rgba(255,255,255,0));filter:blur(14px)}
+
+    .brand{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+    .brand h1{font-size:clamp(28px,5vw,44px);letter-spacing:.4px;margin:0;font-weight:900;color:#111827}
+    .brand p{margin:2px 0 0;font-weight:700;color:#111827}
+
+    /* Toolbar */
+    .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px}
+    .search{flex:1;min-width:220px;display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--border);border-radius:999px;padding:8px 12px}
+    .search input{border:0;outline:none;flex:1;min-width:120px}
+    .btn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);background:#fff;border-radius:999px;padding:8px 12px;font-weight:800}
+    .btn:hover{box-shadow:0 6px 18px rgba(17,24,39,.08)}
+
+    /* Category chips */
+    nav.chips{margin-top:14px;display:flex;flex-wrap:wrap;gap:8px;position:sticky;top:0.5rem;z-index:5}
+    .chip{display:inline-flex;align-items:center;gap:8px;background:#111827;color:#fff;border:1px solid rgba(255,255,255,.18);padding:8px 12px;border-radius:999px;font-weight:700;font-size:.92rem;transition:transform .12s ease, box-shadow .2s ease, background .2s}
+    .chip:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(17,24,39,.15)}
+    .chip.active{background:var(--brand-red)}
+
+    main{margin-top:22px}
+    section{margin-bottom:36px}
+
+    h2.section-title{display:flex;align-items:center;gap:12px;margin:0 0 16px;font-size:1.35rem;font-weight:900;color:var(--brand-red)}
+    h2.section-title::after{content:"";flex:1;height:3px;background:linear-gradient(90deg, #ffeeb0, transparent);border-radius:2px}
+
+    /* Grid cards */
+    .menu-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;position:relative;transition:transform .12s ease, box-shadow .2s ease}
+    .card:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(0,0,0,.06)}
+    .card.special{border-left:6px solid var(--brand-yellow)}
+    .badge{position:absolute;top:12px;right:12px;padding:5px 9px;border-radius:999px;font-size:.75rem;font-weight:800;color:#fff}
+    .badge.new{background:var(--accent)}
+    .badge.special{right:auto;left:12px;background:#a16207}
+
+    .item-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin:2px 0 6px}
+    .item-title{font-size:1.12rem;font-weight:800;color:#111827}
+    .price{font-weight:900;color:var(--price);white-space:nowrap}
+    .desc{color:var(--muted);font-size:.97rem}
+
+    .actions{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
+    .btn.primary{background:var(--brand-red);color:#fff;border-color:transparent}
+    .btn.ghost{background:#fff}
+
+    /* Two-up lists for sides & drinks */
+    .lists{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
+    .list{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px}
+    .list h3{margin:0 0 8px;font-size:1.1rem;font-weight:900;color:#111827}
+    .list ul{list-style:none;margin:0;padding:0}
+    .list li{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px dashed var(--border)}
+    .list li:last-child{border-bottom:none}
+
+    /* Footer */
+    footer{margin:26px 0 72px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;color:#374151}
+    .social{display:flex;gap:12px;align-items:center}
+    .social a{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--border);border-radius:999px;background:#fff}
+    .social svg{width:18px;height:18px}
+
+    /* Floating buttons */
+    .whatsapp-float{position:fixed;right:16px;bottom:16px;display:inline-flex;align-items:center;gap:8px;background:#25D366;color:#fff;padding:12px 14px;border-radius:999px;box-shadow:0 10px 24px rgba(37,211,102,.4);font-weight:900;z-index:50}
+    .to-top{position:fixed;right:16px;bottom:76px;background:#111827;color:#fff;border-radius:999px;padding:10px 12px;box-shadow:0 8px 20px rgba(17,24,39,.25);display:inline-flex}
+
+    /* Print styles */
+    @media print{
+      body{background:#fff}
+      header.hero{background:#fff;border-color:#999}
+      .chip,.badge,.whatsapp-float,.to-top,.actions,.toolbar{display:none !important}
+      .card,.list{box-shadow:none;border-color:#999}
+      a:after{content:" (" attr(href) ")";font-weight:400}
+    }
+  </style>
 </head>
 <body>
+  <div class="container">
+    <header class="hero" id="top">
+      <div class="brand">
+        <div>
+          <h1>HELLO! BURGER</h1>
+          <p>Homemade Burgers — Fresh &amp; Delicious</p>
+        </div>
+      </div>
+      <div class="toolbar" aria-label="Alat bantu menu">
+        <div class="search" role="search">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 21l-4.3-4.3m2.05-5.2a7.75 7.75 0 1 1-15.5 0 7.75 7.75 0 0 1 15.5 0Z" stroke="#6b7280" stroke-width="1.6" stroke-linecap="round"/></svg>
+          <input id="searchInput" type="search" placeholder="Cari menu… (contoh: teriyaki, fries)" aria-label="Cari item menu"/>
+        </div>
+        <button id="printBtn" class="btn" type="button" aria-label="Cetak menu">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 7V3h10v4M6 17H4a2 2 0 0 1-2-2v-3a3 3 0 0 1 3-3h14a3 3 0 0 1 3 3v3a2 2 0 0 1-2 2h-2M7 17h10v4H7z" stroke="#111827" stroke-width="1.6" stroke-linecap="round"/></svg>
+          Cetak
+        </button>
+        <div id="resultInfo" class="btn" aria-live="polite">Menampilkan semua item</div>
+      </div>
 
-    <div class="container">
-        <header>
-            <h1>HELLO! BURGER</h1>
-            <p>HOMEMADE BURGER Fresh & Delicious</p>
-        </header>
+      <nav class="chips" aria-label="Kategori menu">
+        <a class="chip active" href="#" data-filter="*">Semua</a>
+        <a class="chip" href="#" data-filter="beef">Beef Burgers</a>
+        <a class="chip" href="#" data-filter="chicken">Chicken Burgers</a>
+        <a class="chip" href="#" data-filter="others">Lainnya</a>
+        <a class="chip" href="#" data-filter="sidedrink">Sides &amp; Drinks</a>
+      </nav>
+    </header>
 
-        <main>
-            <section id="menu-burgers">
-                <h2>BEEF BURGERS</h2>
-                <div class="menu-category">
-                    <div class="menu-item">
-                        <div class="menu-item-header">
-                            <h3>Beef Cheese Burger</h3>
-                            <span class="price">RP.40.000</span>
-                        </div>
-                        <p class="description">(Beef patty, letuce, caramelized onion, tomat, cheese with our cheeseburger sauce)</p>
-                    </div>
-                    <div class="menu-item">
-                        <div class="menu-item-header">
-                            <h3>Teriyaki Burger</h3>
-                            <span class="price">RP.40.000</span>
-                        </div>
-                        <p class="description">(Beef patty, letuce, caramelized onion, tomat, mayonaise with our TERIYAKI sauce)</p>
-                    </div>
-                    <div class="menu-item">
-                        <div class="menu-item-header">
-                            <h3>Double Beef Cheese Burger</h3>
-                            <span class="price">RP.50.000</span>
-                        </div>
-                        <p class="description">(Double Beef patty, letuce, caramelized onion, tomat, double cheese with our cheeseburger sauce)</p>
-                    </div>
-                    <div class="menu-item special">
-                        <div class="menu-item-header">
-                            <h3>Special YAKINIKU BBQ Burger</h3>
-                            <span class="price">RP.55.000</span>
-                        </div>
-                        <p class="description">(Beef patty, Beef ribs slice, letuce, caramelized onion, tomat, cheese with Japanese BBQ sauce)</p>
-                    </div>
-                </div>
+    <main>
+      <!-- BEEF -->
+      <section id="beef" aria-labelledby="beef-title">
+        <h2 id="beef-title" class="section-title">BEEF BURGERS</h2>
+        <div class="menu-grid">
+          <article class="card" data-category="beef" data-name="Beef Cheese Burger">
+            <div class="item-header">
+              <h3 class="item-title">Beef Cheese Burger</h3>
+              <span class="price">Rp 40.000</span>
+            </div>
+            <p class="desc">Beef patty, <em>lettuce</em>, caramelized onion, <em>tomato</em>, cheese, dengan saus cheeseburger.</p>
+            <div class="actions">
+              <a class="btn primary order-btn" href="#" data-item="Beef Cheese Burger">Pesan via WhatsApp</a>
+            </div>
+          </article>
 
-                <h2>CHICKEN BURGERS</h2>
-                <div class="menu-category">
-                    <div class="menu-item">
-                        <div class="menu-item-header">
-                            <h3>Chicken Cheese Burger</h3>
-                            <span class="price">RP.35.000</span>
-                        </div>
-                        <p class="description">(Chicken patty, letuce, caramelized onion, tomat, cheese with our cheeseburger sauce)</p>
-                    </div>
-                    <div class="menu-item">
-                        <div class="menu-item-header">
-                            <h3>Chicken Teriyaki Burger</h3>
-                            <span class="price">RP.35.000</span>
-                        </div>
-                        <p class="description">(Chicken patty, letuce, caramelized onion, tomat, mayonaise with our TERIYAKI sauce)</p>
-                    </div>
-                    <div class="menu-item">
-                        <div class="menu-item-header">
-                            <h3>Double Chicken Cheese Burger</h3>
-                            <span class="price">RP.45.000</span>
-                        </div>
-                        <p class="description">(Double Chicken patty letuce, caramelized onion, tomat, double cheese with our cheeseburger sauce)</p>
-                    </div>
-                </div>
-            </section>
+          <article class="card" data-category="beef" data-name="Teriyaki Burger">
+            <div class="item-header">
+              <h3 class="item-title">Teriyaki Burger</h3>
+              <span class="price">Rp 40.000</span>
+            </div>
+            <p class="desc">Beef patty, <em>lettuce</em>, caramelized onion, <em>tomato</em>, mayonnaise, dengan saus teriyaki.</p>
+            <div class="actions">
+              <a class="btn primary order-btn" href="#" data-item="Teriyaki Burger">Pesan via WhatsApp</a>
+            </div>
+          </article>
 
-            <section id="menu-others">
-                <h2>LAINNYA</h2>
-                <div class="menu-category">
-                    <div class="menu-item new-item">
-                        <span class="new-badge">NEW!</span>
-                        <div class="menu-item-header">
-                            <h3>Classic Hot Dog</h3>
-                            <span class="price">Rp.50.000</span>
-                        </div>
-                        <p class="description">(Beef sausage, caramelized onion, kecup and mustard. Always with French Fries)</p>
-                    </div>
-                    <div class="menu-item">
-                        <div class="menu-item-header">
-                            <h3>Chicken Sandwich</h3>
-                            <span class="price">Rp.45.000</span>
-                        </div>
-                        <p class="description">(CHICKEN BREAST, EGG, TOMATO, LETUCE, WITH OUR SANDWICH SAUCE. Always with French Fries)</p>
-                    </div>
-                    <div class="menu-item">
-                        <div class="menu-item-header">
-                            <h3>Beef Sandwich</h3>
-                            <span class="price">Rp.60.000</span>
-                        </div>
-                        <p class="description">(BEEF SIRLOIN, EGG, TOMATO, LETUCE, WITH OUR SANDWICH SAUCE. Always with French Fries)</p>
-                    </div>
-                </div>
-            </section>
+          <article class="card" data-category="beef" data-name="Double Beef Cheese Burger">
+            <div class="item-header">
+              <h3 class="item-title">Double Beef Cheese Burger</h3>
+              <span class="price">Rp 50.000</span>
+            </div>
+            <p class="desc">Double beef patty, <em>lettuce</em>, caramelized onion, <em>tomato</em>, double cheese, dengan saus cheeseburger.</p>
+            <div class="actions">
+              <a class="btn primary order-btn" href="#" data-item="Double Beef Cheese Burger">Pesan via WhatsApp</a>
+            </div>
+          </article>
 
-            <section id="menu-sides-drinks">
-                <div class="sides-drinks-container">
-                    <div class="menu-list">
-                        <h2>SIDES</h2>
-                        <ul>
-                            <li><span>French Fries size S</span> <span class="price">RP.15.000</span></li>
-                            <li><span>French Fries size L</span> <span class="price">RP.25.000</span></li>
-                        </ul>
-                    </div>
-                    <div class="menu-list">
-                        <h2>DRINKS</h2>
-                        <ul>
-                            <li><span>Bintang small</span> <span class="price">RP.30.000</span></li>
-                            <li><span>Bintang Lemon</span> <span class="price">RP.30.000</span></li>
-                            <li><span>Coca-cola/Sprite/Fanta</span> <span class="price">RP.12.000</span></li>
-                            <li><span>Freshtea Jasmine</span> <span class="price">RP.10.000</span></li>
-                            <li><span>Mineral water</span> <span class="price">RP.8.000</span></li>
-                            <li><span>Crystal</span> <span class="price">35.000</span></li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
-        </main>
+          <article class="card special" data-category="beef" data-name="Yakiniku BBQ Burger">
+            <span class="badge special">Special</span>
+            <div class="item-header">
+              <h3 class="item-title">Yakiniku BBQ Burger</h3>
+              <span class="price">Rp 55.000</span>
+            </div>
+            <p class="desc">Beef patty, irisan iga sapi, <em>lettuce</em>, caramelized onion, <em>tomato</em>, cheese, dengan Japanese BBQ sauce.</p>
+            <div class="actions">
+              <a class="btn primary order-btn" href="#" data-item="Yakiniku BBQ Burger">Pesan via WhatsApp</a>
+            </div>
+          </article>
+        </div>
+      </section>
 
-        <footer>
-            <p>Follow us on:</p>
-            <p>Instagram: hello_burger_bali | Facebook: hello burger bali</p>
-        </footer>
-    </div>
+      <!-- CHICKEN -->
+      <section id="chicken" aria-labelledby="chicken-title">
+        <h2 id="chicken-title" class="section-title">CHICKEN BURGERS</h2>
+        <div class="menu-grid">
+          <article class="card" data-category="chicken" data-name="Chicken Cheese Burger">
+            <div class="item-header">
+              <h3 class="item-title">Chicken Cheese Burger</h3>
+              <span class="price">Rp 35.000</span>
+            </div>
+            <p class="desc">Chicken patty, <em>lettuce</em>, caramelized onion, <em>tomato</em>, cheese, dengan saus cheeseburger.</p>
+            <div class="actions">
+              <a class="btn primary order-btn" href="#" data-item="Chicken Cheese Burger">Pesan via WhatsApp</a>
+            </div>
+          </article>
 
-    <a href="https://wa.me/6287729084225?text=Halo%2C%20saya%20melihat%20menu%20Hello%20Burger%20dan%20ingin%20memesan..." class="whatsapp-float" target="_blank">
-        Pesan via WhatsApp
-    </a>
+          <article class="card" data-category="chicken" data-name="Chicken Teriyaki Burger">
+            <div class="item-header">
+              <h3 class="item-title">Chicken Teriyaki Burger</h3>
+              <span class="price">Rp 35.000</span>
+            </div>
+            <p class="desc">Chicken patty, <em>lettuce</em>, caramelized onion, <em>tomato</em>, mayonnaise, dengan saus teriyaki.</p>
+            <div class="actions">
+              <a class="btn primary order-btn" href="#" data-item="Chicken Teriyaki Burger">Pesan via WhatsApp</a>
+            </div>
+          </article>
 
+          <article class="card" data-category="chicken" data-name="Double Chicken Cheese Burger">
+            <div class="item-header">
+              <h3 class="item-title">Double Chicken Cheese Burger</h3>
+              <span class="price">Rp 45.000</span>
+            </div>
+            <p class="desc">Double chicken patty, <em>lettuce</em>, caramelized onion, <em>tomato</em>, double cheese, dengan saus cheeseburger.</p>
+            <div class="actions">
+              <a class="btn primary order-btn" href="#" data-item="Double Chicken Cheese Burger">Pesan via WhatsApp</a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- LAINNYA -->
+      <section id="others" aria-labelledby="others-title">
+        <h2 id="others-title" class="section-title">LAINNYA</h2>
+        <div class="menu-grid">
+          <article class="card" data-category="others" data-name="Classic Hot Dog">
+            <span class="badge new">NEW!</span>
+            <div class="item-header">
+              <h3 class="item-title">Classic Hot Dog</h3>
+              <span class="price">Rp 50.000</span>
+            </div>
+            <p class="desc">Beef sausage, caramelized onion, ketchup &amp; mustard. <strong>Selalu disajikan dengan French Fries</strong>.</p>
+            <div class="actions">
+              <a class="btn primary order-btn" href="#" data-item="Classic Hot Dog">Pesan via WhatsApp</a>
+            </div>
+          </article>
+
+          <article class="card" data-category="others" data-name="Chicken Sandwich">
+            <div class="item-header">
+              <h3 class="item-title">Chicken Sandwich</h3>
+              <span class="price">Rp 45.000</span>
+            </div>
+            <p class="desc">Chicken breast, egg, <em>tomato</em>, <em>lettuce</em>, dengan saus sandwich. <strong>Selalu disajikan dengan French Fries</strong>.</p>
+            <div class="actions">
+              <a class="btn primary order-btn" href="#" data-item="Chicken Sandwich">Pesan via WhatsApp</a>
+            </div>
+          </article>
+
+          <article class="card" data-category="others" data-name="Beef Sandwich">
+            <div class="item-header">
+              <h3 class="item-title">Beef Sandwich</h3>
+              <span class="price">Rp 60.000</span>
+            </div>
+            <p class="desc">Beef sirloin, egg, <em>tomato</em>, <em>lettuce</em>, dengan saus sandwich. <strong>Selalu disajikan dengan French Fries</strong>.</p>
+            <div class="actions">
+              <a class="btn primary order-btn" href="#" data-item="Beef Sandwich">Pesan via WhatsApp</a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- SIDES & DRINKS -->
+      <section id="sides-drinks" aria-labelledby="sides-title">
+        <h2 id="sides-title" class="section-title">SIDES &amp; DRINKS</h2>
+        <div class="lists">
+          <div class="list" data-category="sidedrink">
+            <h3>SIDES</h3>
+            <ul>
+              <li><span>French Fries — size S</span> <span class="price">Rp 15.000</span></li>
+              <li><span>French Fries — size L</span> <span class="price">Rp 25.000</span></li>
+            </ul>
+          </div>
+          <div class="list" data-category="sidedrink">
+            <h3>DRINKS</h3>
+            <ul>
+              <li><span>Bintang (small)</span> <span class="price">Rp 30.000</span></li>
+              <li><span>Bintang Lemon</span> <span class="price">Rp 30.000</span></li>
+              <li><span>Coca‑Cola / Sprite / Fanta</span> <span class="price">Rp 12.000</span></li>
+              <li><span>Freshtea Jasmine</span> <span class="price">Rp 10.000</span></li>
+              <li><span>Mineral Water</span> <span class="price">Rp 8.000</span></li>
+              <li><span>Crystal</span> <span class="price">Rp 35.000</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <small>Semua harga dalam Rupiah.</small>
+      <div class="social">
+        <a href="https://instagram.com/hello_burger_bali" target="_blank" rel="noopener" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Z" stroke="#111827"/><path d="M16.5 11.7A4.8 4.8 0 1 1 7 12a4.8 4.8 0 0 1 9.5-.3Z" stroke="#111827"/><circle cx="18" cy="6" r="1.2" fill="#111827"/></svg>
+          @hello_burger_bali
+        </a>
+        <span>Facebook: hello burger bali</span>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Floating actions -->
+  <a href="https://wa.me/6287729084225?text=Halo%2C%20saya%20melihat%20menu%20HELLO!%20BURGER%20dan%20ingin%20memesan..." class="whatsapp-float" target="_blank" rel="noopener" aria-label="Pesan via WhatsApp">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20.5 12a8.5 8.5 0 0 1-12.5 7.5L3 21l1.5-4.8A8.5 8.5 0 1 1 20.5 12Z" stroke="#fff" stroke-width="1.6"/><path d="M16.2 14.3c-.3.8-1.6 1.3-2.3 1.3-.6 0-1.4-.2-2.5-.8a8.5 8.5 0 0 1-2.7-2.3c-.4-.5-.8-1.1-.8-1.8 0-.8.5-1.2.7-1.4.2-.2.5-.3.7-.3h.5c.1 0 .3.2.4.5l.5 1.2c.1.3 0 .5-.1.7l-.3.4c-.1.1 0 .3 0 .4.3.6 1.2 1.5 1.8 1.9.2.1.3.1.4 0l.6-.4c.2-.1.4-.1.6 0l1.3.6c.3.1.4.3.4.4Z" fill="#fff"/></svg>
+    Pesan via WhatsApp
+  </a>
+  <a href="#top" class="to-top" aria-label="Kembali ke atas">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 19V6m0 0 6 6M12 6 6 12" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>
+  </a>
+
+  <style>html{scroll-behavior:smooth}</style>
+
+  <script>
+    (function(){
+      var chips = document.querySelectorAll('.chip');
+      var searchInput = document.getElementById('searchInput');
+      var resultInfo = document.getElementById('resultInfo');
+      var printBtn = document.getElementById('printBtn');
+
+      function normalize(text){
+        return (text || '').toLowerCase();
+      }
+
+      function filterItems(){
+        var activeFilter = document.querySelector('.chip.active');
+        var filterVal = activeFilter ? activeFilter.getAttribute('data-filter') : '*';
+        var q = normalize(searchInput.value);
+        var cards = Array.prototype.slice.call(document.querySelectorAll('[data-category]'));
+        var visibleCount = 0;
+
+        cards.forEach(function(el){
+          var category = el.getAttribute('data-category');
+          var name = el.getAttribute('data-name') || '';
+          var text = (el.textContent || '') + ' ' + name;
+          var matchFilter = (filterVal === '*') || (category === filterVal);
+          var matchQuery = q === '' || normalize(text).indexOf(q) !== -1;
+          var show = matchFilter && matchQuery;
+          el.style.display = show ? '' : 'none';
+          if (show) visibleCount++;
+        });
+
+        if (visibleCount === 0){
+          resultInfo.textContent = 'Tidak ada item cocok';
+        } else {
+          resultInfo.textContent = 'Menampilkan ' + visibleCount + ' item';
+        }
+      }
+
+      chips.forEach(function(chip){
+        chip.addEventListener('click', function(e){
+          e.preventDefault();
+          chips.forEach(function(c){ c.classList.remove('active'); });
+          this.classList.add('active');
+          filterItems();
+        });
+      });
+
+      searchInput.addEventListener('input', filterItems);
+      printBtn.addEventListener('click', function(){ window.print(); });
+
+      // Order via WhatsApp per item
+      var orderButtons = document.querySelectorAll('.order-btn');
+      var waNumber = '6287729084225';
+      orderButtons.forEach(function(btn){
+        btn.addEventListener('click', function(e){
+          e.preventDefault();
+          var item = this.getAttribute('data-item') || 'menu';
+          var qty = prompt('Jumlah pesanan untuk ' + item + ' (angka):', '1');
+          if (qty === null) return; // batal
+          qty = parseInt(qty, 10);
+          if (isNaN(qty) || qty <= 0) qty = 1; // fallback aman
+          var msg = 'halo kak saya ingin pesan ' + item + ' dengan jumlah ' + qty;
+          var url = 'https://wa.me/' + waNumber + '?text=' + encodeURIComponent(msg);
+          window.open(url, '_blank');
+        });
+      });
+
+      // Initial filter
+      filterItems();
+    })();
+  </script>
 </body>
 </html>
