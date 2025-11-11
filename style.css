@@ -1,0 +1,175 @@
+/* Basic Reset & Fonts */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 900px;
+    margin: 20px auto;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    overflow: hidden;
+}
+
+/* Header */
+header {
+    background-color: #FFD700; /* Warna kuning cerah seperti di menu */
+    color: #333;
+    padding: 20px;
+    text-align: center;
+}
+
+header h1 {
+    font-weight: 900;
+    font-size: 2.5rem;
+}
+
+header p {
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+/* Main Content */
+main {
+    padding: 20px 30px;
+}
+
+section {
+    margin-bottom: 30px;
+}
+
+h2 {
+    font-weight: 900;
+    font-size: 1.8rem;
+    color: #d9534f; /* Warna merah untuk judul */
+    border-bottom: 3px solid #f0f0f0;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+/* Menu Item Cards */
+.menu-category {
+    display: grid;
+    grid-template-columns: 1fr; /* Default 1 kolom untuk mobile */
+    gap: 20px;
+}
+
+.menu-item {
+    background: #fafafa;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 20px;
+    position: relative;
+    transition: box-shadow 0.3s ease;
+}
+
+.menu-item:hover {
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.menu-item.special {
+    border-left: 5px solid #FFD700;
+}
+
+.menu-item.new-item {
+     border-left: 5px solid #5bc0de; /* Biru untuk 'NEW' */
+}
+
+.new-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #5bc0de;
+    color: white;
+    padding: 3px 8px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    border-radius: 3px;
+}
+
+.menu-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.menu-item-header h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #333;
+}
+
+.menu-item-header .price {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #4CAF50; /* Hijau untuk harga */
+    white-space: nowrap;
+    margin-left: 10px;
+}
+
+.menu-item .description {
+    font-size: 0.95rem;
+    color: #666;
+}
+
+/* Sides & Drinks List */
+.sides-drinks-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+}
+
+.menu-list ul {
+    list-style: none;
+}
+
+.menu-list li {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.05rem;
+    padding: 10px 0;
+    border-bottom: 1px dashed #ccc;
+}
+
+.menu-list li:last-child {
+    border-bottom: none;
+}
+
+.menu-list li .price {
+    font-weight: 700;
+    color: #4CAF50;
+    margin-left: 10px;
+}
+
+/* Footer */
+footer {
+    background-color: #333;
+    color: #f4f4f4;
+    text-align: center;
+    padding: 20px;
+    font-size: 0.9rem;
+}
+
+/* Responsive (untuk layar lebih lebar) */
+@media (min-width: 768px) {
+    .menu-category {
+        /* Buat 2 kolom di tablet/desktop */
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .sides-drinks-container {
+        /* Buat 2 kolom */
+        grid-template-columns: 1fr 1fr;
+    }
+}
